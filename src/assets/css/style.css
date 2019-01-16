@@ -11,9 +11,11 @@ a {
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
 }
+
 .btn-pill {
     border-radius: 50em;
 }
+
 .top-section {
     margin-top: 10px;
     padding: 10px 20px;
@@ -30,23 +32,28 @@ a {
     min-height: 300px;
     width: 300px;
     margin-right: 5px;
-    border:1px solid #3875f1;
+    border: 1px solid #3875f1;
 }
-.strip-legs-option .card-header{
+
+.strip-legs-option .card-header {
     background: #3875f1;
     color: #fff;
 }
-.strip-legs-option .card-header-actions{
+
+.strip-legs-option .card-header-actions {
     display: inline-block;
     float: right;
     margin-right: -.25rem;
 }
+
 .strip-legs-option .card-header-actions a {
     color: #fff !important;
 }
-.strip-legs-option .list-group-item:nth-child(odd){
-  background:#cee1f6
+
+.strip-legs-option .list-group-item:nth-child(odd) {
+    background: #cee1f6
 }
-.strip-legs-option .list-group-item:nth-child(even){
-  background:#e1eefc
+
+.strip-legs-option .list-group-item:nth-child(even) {
+    background: #e1eefc
 }
