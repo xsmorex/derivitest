@@ -48,7 +48,7 @@
                 <b-input-group>
                     <b-form-input size="sm" name="nationalIn" type="text" v-model="nationalIn"></b-form-input>
                     <b-input-group-append>
-                        <b-button size="sm" variant="warning">Sell</b-button>
+                        <b-button size="sm" :variant="getVarientClass">{{opt2.nationalInAction}}</b-button>
                     </b-input-group-append>
                 </b-input-group>
             </b-form-group>
@@ -88,7 +88,6 @@ export default {
     },
     methods: {
         onChange() {
-            console.log(this.option)
             this.$store.dispatch(CHANGE_OPTIONS2, {
                 id: this.option.id,
                 data: {
@@ -96,7 +95,8 @@ export default {
                     nationalIn: this.nationalIn
                 }
             });
-        }
+        },
+
     },
     computed: {
         ...mapGetters(["selectedSymbol", "callPutOptionList"]),
@@ -109,6 +109,9 @@ export default {
         },
         getCallPutOptionValue() {
             return [this.selectedSymbol, this.opt2.callPutOption].join(" ")
+        },
+        getVarientClass() {
+            return (this.opt2.nationalInAction.toLowerCase() == "buy") ? "info" : "warning"
         }
     }
 };

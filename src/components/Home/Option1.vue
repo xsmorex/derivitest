@@ -66,7 +66,7 @@
                         <b-input-group>
                             <b-form-input size="sm" name="nationalIn" type="text" value="100,000"></b-form-input>
                             <b-input-group-append>
-                                <b-form-select name="callPutOption" :plain="true" :options="nationalInActionList" :value="option.nationalInAction">
+                                <b-form-select name="callPutOption" :plain="true" :options="nationalInActionList" v-model="nationalInAction">
                                 </b-form-select>
                             </b-input-group-append>
                         </b-input-group>
@@ -108,7 +108,8 @@ export default {
             callPutOption: this.option.callPutOption,
             stripeBeginDate: this.option.stripeBeginDate,
             stripeEndDate: this.option.stripeEndDate,
-            expiries: this.option.expiries
+            expiries: this.option.expiries,
+            nationalInAction:this.option.nationalInAction
         };
     },
     watch: {
@@ -139,6 +140,9 @@ export default {
         },
         expiries() {
             this.onChange();
+        },
+        nationalInAction(){
+            this.onChange()
         }
     },
     components: {
@@ -158,7 +162,8 @@ export default {
                 callPutOption: this.callPutOption,
                 stripeBeginDate: this.stripeBeginDate,
                 stripeEndDate: this.stripeEndDate,
-                expiries: this.expiries
+                expiries: this.expiries,
+                nationalInAction:this.nationalInAction
             });
         }
     },

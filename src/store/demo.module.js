@@ -8,6 +8,7 @@ import {
 const state = {
   option1: [],
   option2: [],
+  defaultExpiries:5,
   optionClassList: ["Vanilla", "CashDeals", "Binaries"],
   callPutOptionList: ["Put", "Call"],
   nationalInActionList: ["Buy", "Sell"],
@@ -81,7 +82,7 @@ const mutations = {
       callPutOption: callPutOption || state.callPutOptionList[0],
       stripeBeginDate: stripeBeginDate || defualtStripeBeginDate,
       stripeEndDate: stripeEndDate || defaultStripeEndDate,
-      expiries: expiries || 1,
+      expiries: expiries || state.defaultExpiries,
       nationalInAction: nationalInAction || state.nationalInActionList[0]
     };
     if (_.isUndefined(id) || id == 0) {
@@ -147,7 +148,10 @@ const mutations = {
     }
     else {
       option2ItemObj.option2id = option2id;
-      state.option2.splice(index, 1, option2ItemObj);
+      
+      let indexNew = _.findIndex(state.option2, { option2id: option2id });
+
+      state.option2.splice(indexNew, 1, option2ItemObj);
       //Vue.set(state, 'option2', [...items]);
     }
   },
