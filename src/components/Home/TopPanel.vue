@@ -16,14 +16,14 @@
             <b-form-group label="Currency Pair" label-for="currencyPair" label-size="sm" :label-cols="5" :horizontal="true">
                 <b-row>
                     <b-col cols="5">
-                        <b-form-select id="fromCurrency" name="fromCurrency" :plain="true" :options="['GBP', 'USD']" value="GBP">
+                        <b-form-select id="fromCurrency" v-model="selectedOption" name="fromCurrency" :plain="true" :options="symbolList" :value="selectedSymbol">
                         </b-form-select>
                     </b-col>
                     <b-col cols="2">
                         <span class="fa fa-exchange"></span>
                     </b-col>
                     <b-col cols="5">
-                        <b-form-select id="toCurrency" name="toCurrency" :plain="true" :options="['GBP', 'USD']" value="GBP">
+                        <b-form-select id="toCurrency" name="toCurrency" :plain="true" :options="symbolList" :value="symbolList[symbolList.length-1]">
                         </b-form-select>
                     </b-col>
                 </b-row>
@@ -47,7 +47,36 @@
 </template>
 
 <script>
+import {
+    mapGetters
+} from "vuex";
+import {
+    CHANGE_SELECTED_SYMBOL
+} from "@/store/actions.type";
+
 export default {
-    name: "TopPanel"
+    name: "TopPanel",
+    data: function () {
+        return {
+            selectedOption: {}
+        };
+    },
+    computed: {
+        ...mapGetters(["symbolList", "selectedSymbol"])
+    },
+    mounted() {
+        this.selectedOption = this.symbolList[0]
+    },
+    methods: {
+        changeTopSymbol(symbol) {
+            this.$store.dispatch(CHANGE_SELECTED_SYMBOL, symbol);
+        },
+    },
+    watch: {
+        selectedOption: function (newValue) {
+            this.changeTopSymbol(newValue);
+        }
+    }
+
 };
 </script>

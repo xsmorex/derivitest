@@ -4,7 +4,7 @@
     <div class="middle-section mt-3 pt-4 pb-5">
         <div class="d-flex flex-row flex-now">
             <template v-for="option in option1">
-                <Option1 :key="option.id" />
+                <Option1 :key="option.id" :option="option"/>
             </template>
         </div>
     </div>
@@ -23,6 +23,7 @@ export default {
     Option1
   },
   mounted() {
+    console.log("mounted")
     this.$store.dispatch(SET_DEFAULT_OPTION1)
   },
   computed: {

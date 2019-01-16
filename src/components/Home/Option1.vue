@@ -12,31 +12,31 @@
         <b-card-body class="p-0">
             <b-list-group flush>
                 <b-list-group-item>
-                    <b-form-select name="optionClass" :plain="true" :options="['Vanilla', 'Cash Deals']" value="Vanilla">
+                    <b-form-select name="optionClass" :plain="true" :options="optionClassList" :value="option.optionClass">
                     </b-form-select>
                 </b-list-group-item>
                 <b-list-group-item>
-                    <b-form-select name="callPutOption" :plain="true" :options="['GBP Put', 'GBP Call']" value="GBP Put">
+                    <b-form-select name="callPutOption" :plain="true" :options="getCallPutOptionList" :value="getCallPutOptionValue">
                     </b-form-select>
                 </b-list-group-item>
                 <b-list-group-item>
-                    <b-form-input name="strike" type="text" size="sm" placeholder="1.3000"></b-form-input>
+                    <b-form-input name="strike" type="text" size="sm" :value="option.strike"></b-form-input>
                 </b-list-group-item>
                 <b-list-group-item>&nbsp;</b-list-group-item>
                 <b-list-group-item>&nbsp;</b-list-group-item>
                 <b-list-group-item>
                     <b-form-group class="m-0" label="Strip begin date" label-for="strip_begin_date" :label-cols="5" label-size="sm" :horizontal="true">
-                        <b-form-input type="date" size="sm" name="strip_begin_date"></b-form-input>
+                        <b-form-input type="date" size="sm" name="strip_begin_date" :value="option.stripeBeginDate"></b-form-input>
                     </b-form-group>
                 </b-list-group-item>
                 <b-list-group-item>
                     <b-form-group class="m-0" label="Strip end date" label-for="strip_end_date" :label-cols="5" label-size="sm" :horizontal="true">
-                        <b-form-input type="date" size="sm" name="strip_end_date"></b-form-input>
+                        <b-form-input type="date" size="sm" name="strip_end_date" :value="option.stripeEndDate"></b-form-input>
                     </b-form-group>
                 </b-list-group-item>
                 <b-list-group-item>
                     <b-form-group class="m-0" label="Expiries" label-for="expiries" label-size="sm" :label-cols="5" :horizontal="true">
-                        <b-form-input name="expiries" type="text" size="sm" placeholder="6"></b-form-input>
+                        <b-form-input name="expiries" type="text" size="sm" :value="option.expiries"></b-form-input>
                     </b-form-group>
                 </b-list-group-item>
                 <b-list-group-item>
@@ -59,7 +59,8 @@
                         <b-input-group>
                             <b-form-input size="sm" name="nationalIn" type="text" value="100,000"></b-form-input>
                             <b-input-group-append>
-                                <b-button size="sm" variant="primary">Buy</b-button>
+                                <b-form-select name="callPutOption" :plain="true" :options="nationalInActionList" :value="option.nationalInAction">
+                                </b-form-select>
                             </b-input-group-append>
                         </b-input-group>
                     </b-form-group>
@@ -74,11 +75,32 @@
 
 <script>
 import Option2 from "./Option2.vue";
+import {
+    mapGetters
+} from "vuex";
 
 export default {
     name: "Option1",
+    props: {
+        "option": {
+            type: Object
+        }
+    },
     components: {
         Option2
     },
+    computed: {
+        ...mapGetters(["optionClassList", "callPutOptionList", "nationalInActionList", "symbolList", "selectedSymbol"]),
+        getCallPutOptionList() {
+            let items = [];
+            this.callPutOptionList.map((data) => {
+                items.push([this.selectedSymbol, data].join(" "))
+            })
+            return items;
+        },
+        getCallPutOptionValue() {
+            return [this.selectedSymbol, this.option.callPutOption].join(" ")
+        }
+    }
 };
 </script>
