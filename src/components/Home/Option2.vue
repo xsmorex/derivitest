@@ -45,7 +45,6 @@ export default {
     watch: {
         option2() {
             this.optionlist = this.getOption2ofOption1();
-            console.log(this.optionlist);
         }
     },
     mounted: function () {

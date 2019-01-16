@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import _ from 'lodash';
 import { CHANGE_OPTIONS1, CHANGE_SELECTED_SYMBOL, SET_DEFAULT_OPTION1, ADD_OPTION1, ADD_OPTION2, CHANGE_OPTIONS2 } from "./actions.type";
 import {
@@ -87,10 +88,14 @@ const mutations = {
     if (_.isUndefined(id) || id == 0) {
       option1.id = "Option_" + Date.now() + Math.random();
       state.option1.push(option1)
+
     }
     else {
+      option1.id = id;
       var index = _.findIndex(state.option1, { id: id });
-      state.option1.splice(index, 1, option1);
+      let items = state.option1.splice(index, 1, option1);
+      Vue.set(state, 'items', [...items]);
+
     }
   },
   [CHANGE_OPTIONS2_END](state, { id, data }) {
@@ -99,6 +104,10 @@ const mutations = {
     let option2 = _.filter(state.option2, { id: id });
     let option2StripeBeginDate;
     let option2StripeEndDate;
+    if((option2.length+1)>option1.expiries){
+      alert("Max Expiries");
+      return;
+    }
     if (option2.length==0) {
       option2StripeBeginDate = new Date(option1.stripeBeginDate);
       option2StripeBeginDate.setMonth(option2StripeBeginDate.getMonth() + 1);
@@ -109,20 +118,15 @@ const mutations = {
     }
     else {
       let lastOption = option2[option2.length - 1];
-      console.log(lastOption)
       option2StripeBeginDate = new Date(lastOption.stripeBeginDate);
       option2StripeBeginDate.setMonth(option2StripeBeginDate.getMonth() + 1);
       option2StripeEndDate = new Date(option2StripeBeginDate);
       option2StripeEndDate.setMonth(option2StripeEndDate.getMonth() + 1)
-      console.log(option2StripeEndDate)
-
       option2StripeEndDate.setDate(option2StripeEndDate.getDate() - 1);
-      console.log(option2StripeEndDate)
     }
 
     option2StripeBeginDate = new Date(option2StripeBeginDate).toISOString().slice(0, 10);
     option2StripeEndDate = new Date(option2StripeEndDate).toISOString().slice(0, 10);
-    console.log(option2StripeEndDate)
     let { option2id, nationalIn, stripeBeginDate, stripeEndDate } = data;
 
     let option2ItemObj = {
@@ -140,7 +144,9 @@ const mutations = {
     }
     else {
       var index = _.findIndex(state.option2, { option2id: option2id });
+      
       state.option2.splice(index, 1, option2ItemObj);
+      
     }
   },
   [CHANGE_SYMBOL_END](state, { symbol }) {

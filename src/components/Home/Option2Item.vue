@@ -13,15 +13,6 @@
             <b-form-input name="strike" type="text" size="sm" placeholder="1.3000"></b-form-input>
         </b-list-group-item>
         <b-list-group-item>
-            <!-- <div class="row">
-                <div class="col">
-                    <b-form-input name="trigger1" type="text" size="sm" placeholder="1.3000"></b-form-input>
-                </div>
-                <div class="col">
-                    <b-form-select name="trigger1_type" :plain="true" :options="['Above', 'Below']" value="Above">
-                    </b-form-select>
-                </div>
-            </div> -->
             &nbsp;
         </b-list-group-item>
         <b-list-group-item>&nbsp;</b-list-group-item>

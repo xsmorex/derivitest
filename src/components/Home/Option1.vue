@@ -12,12 +12,19 @@
         <b-card-body class="p-0">
             <b-list-group flush>
                 <b-list-group-item>
-                    <b-form-select name="optionClass" :plain="true" :options="optionClassList" :value="option.optionClass" >
+                    <b-form-select name="optionClass" :plain="true" v-model="optionClass" :options="optionClassList">
                     </b-form-select>
                 </b-list-group-item>
                 <b-list-group-item>
-                    <b-form-select name="callPutOption" :plain="true" :options="getCallPutOptionList" :value="getCallPutOptionValue">
-                    </b-form-select>
+                    <div class="row">
+                        <div class="col">
+                            {{selectedSymbol}}
+                        </div>
+                        <div class="col">
+                            <b-form-select name="callPutOption" :plain="true" :options="callPutOptionList" v-model="callPutOption">
+                            </b-form-select>
+                        </div>
+                    </div>
                 </b-list-group-item>
                 <b-list-group-item>
                     <b-form-input name="strike" type="text" size="sm" :value="option.strike"></b-form-input>
@@ -26,17 +33,17 @@
                 <b-list-group-item>&nbsp;</b-list-group-item>
                 <b-list-group-item>
                     <b-form-group class="m-0" label="Strip begin date" label-for="strip_begin_date" :label-cols="5" label-size="sm" :horizontal="true">
-                        <b-form-input type="date" size="sm" name="strip_begin_date" :value="option.stripeBeginDate"></b-form-input>
+                        <b-form-input type="date" size="sm" name="strip_begin_date" v-model="stripeBeginDate"></b-form-input>
                     </b-form-group>
                 </b-list-group-item>
                 <b-list-group-item>
                     <b-form-group class="m-0" label="Strip end date" label-for="strip_end_date" :label-cols="5" label-size="sm" :horizontal="true">
-                        <b-form-input type="date" size="sm" name="strip_end_date" :value="option.stripeEndDate"></b-form-input>
+                        <b-form-input type="date" size="sm" name="strip_end_date" v-model="stripeEndDate"></b-form-input>
                     </b-form-group>
                 </b-list-group-item>
                 <b-list-group-item>
                     <b-form-group class="m-0" label="Expiries" label-for="expiries" label-size="sm" :label-cols="5" :horizontal="true">
-                        <b-form-input name="expiries" type="text" size="sm" :value="option.expiries"></b-form-input>
+                        <b-form-input name="expiries" type="text" size="sm" v-model="expiries"></b-form-input>
                     </b-form-group>
                 </b-list-group-item>
                 <b-list-group-item>
@@ -46,7 +53,7 @@
                     </b-form-group>
                 </b-list-group-item>
                 <b-list-group-item>
-                    <b-button block variant="secondary" class="btn-pill" size="sm"  @click='toggleDetail()'>Toggle Strip Details</b-button>
+                    <b-button block variant="secondary" class="btn-pill" size="sm" @click='toggleDetail()'>Toggle Strip Details</b-button>
                 </b-list-group-item>
                 <b-list-group-item>
                     Leg Total National:
@@ -70,7 +77,7 @@
         </b-card-body>
     </b-card>
     <template v-if="isDetailShown">
-        <Option2 :option = "option"/>
+        <Option2 :option="option" />
     </template>
 </div>
 </template>
@@ -78,7 +85,8 @@
 <script>
 import Option2 from "./Option2.vue";
 import {
-    ADD_OPTION1
+    ADD_OPTION1,
+    CHANGE_OPTIONS1
 } from "@/store/actions.type";
 import {
     mapGetters
@@ -93,7 +101,29 @@ export default {
     },
     data: function () {
         return {
-            isDetailShown: true
+            isDetailShown: true,
+            optionClass: this.option.optionClass,
+            callPutOption: this.option.callPutOption,
+            stripeBeginDate: this.option.stripeBeginDate,
+            stripeEndDate: this.option.stripeEndDate,
+            expiries: this.option.expiries
+        }
+    },
+    watch: {
+        optionClass() {
+            this.onChange()
+        },
+        callPutOption() {
+            this.onChange()
+        },
+        stripeBeginDate() {
+            this.onChange()
+        },
+        stripeEndDate() {
+            this.onChange()
+        },
+        expiries() {
+            this.onChange()
         }
     },
     components: {
@@ -103,22 +133,22 @@ export default {
         onClick() {
             this.$store.dispatch(ADD_OPTION1)
         },
-        toggleDetail: function(){
+        toggleDetail: function () {
             this.isDetailShown = !this.isDetailShown
+        },
+        onChange() {
+            this.$store.dispatch(CHANGE_OPTIONS1, {
+                id: this.option.id,
+                optionClass: this.optionClass,
+                callPutOption: this.callPutOption,
+                stripeBeginDate: this.stripeBeginDate,
+                stripeEndDate: this.stripeEndDate,
+                expiries: this.expiries
+            })
         }
     },
     computed: {
-        ...mapGetters(["optionClassList", "callPutOptionList", "nationalInActionList", "symbolList", "selectedSymbol"]),
-        getCallPutOptionList() {
-            let items = [];
-            this.callPutOptionList.map((data) => {
-                items.push([this.selectedSymbol, data].join(" "))
-            })
-            return items;
-        },
-        getCallPutOptionValue() {
-            return [this.selectedSymbol, this.option.callPutOption].join(" ")
-        }
+        ...mapGetters(["optionClassList", "callPutOptionList", "nationalInActionList", "symbolList", "selectedSymbol"])
     }
 };
 </script>
