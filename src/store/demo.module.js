@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import _ from 'lodash';
 import { CHANGE_OPTIONS1, CHANGE_SELECTED_SYMBOL, SET_DEFAULT_OPTION1, ADD_OPTION1, ADD_OPTION2, CHANGE_OPTIONS2 } from "./actions.type";
 import {
@@ -51,13 +50,13 @@ const actions = {
     commit(CHANGE_OPTIONS1_END, {})
   },
   [ADD_OPTION2]({ commit }, data) {
-    commit(CHANGE_OPTIONS2_END, { id: data.id, data: data.data || {}})
+    commit(CHANGE_OPTIONS2_END, { id: data.id, data: data.data || {} })
   },
   [CHANGE_OPTIONS1]({ commit }, data) {
     commit(CHANGE_OPTIONS1_END, data);
   },
   [CHANGE_OPTIONS2]({ commit }, data) {
-    commit(CHANGE_OPTIONS2_END, { id: data.id, data: data.data || {}});
+    commit(CHANGE_OPTIONS2_END, { id: data.id, data: data.data || {} });
   },
   [CHANGE_SELECTED_SYMBOL]({ commit }, symbol) {
     commit(CHANGE_SYMBOL_END, {
@@ -93,22 +92,27 @@ const mutations = {
     else {
       option1.id = id;
       var index = _.findIndex(state.option1, { id: id });
-      let items = state.option1.splice(index, 1, option1);
-      Vue.set(state, 'items', [...items]);
+      state.option1.splice(index, 1, option1);
+      //Vue.set(state, 'option1', [...items]);
 
     }
   },
   [CHANGE_OPTIONS2_END](state, { id, data }) {
- 
+
     let option1 = _.find(state.option1, { id: id });
     let option2 = _.filter(state.option2, { id: id });
-    let option2StripeBeginDate;
-    let option2StripeEndDate;
-    if((option2.length+1)>option1.expiries){
+    let option2StripeBeginDate, option2StripeEndDate;
+    let { option2id, nationalIn } = data;
+    let index = _.findIndex(option2, { option2id: option2id });
+    if (option2.length >0 && index < 0) {
+      index = option2.length;
+    }
+    if ((_.isUndefined(option2id) || option2id == 0) && (option2.length + 1) > option1.expiries) {
       alert("Max Expiries");
       return;
     }
-    if (option2.length==0) {
+
+    if (option2.length == 0 || index == 0) {
       option2StripeBeginDate = new Date(option1.stripeBeginDate);
       option2StripeBeginDate.setMonth(option2StripeBeginDate.getMonth() + 1);
       option2StripeEndDate = new Date(option2StripeBeginDate);
@@ -117,7 +121,7 @@ const mutations = {
 
     }
     else {
-      let lastOption = option2[option2.length - 1];
+      let lastOption = option2[index - 1];
       option2StripeBeginDate = new Date(lastOption.stripeBeginDate);
       option2StripeBeginDate.setMonth(option2StripeBeginDate.getMonth() + 1);
       option2StripeEndDate = new Date(option2StripeBeginDate);
@@ -127,14 +131,13 @@ const mutations = {
 
     option2StripeBeginDate = new Date(option2StripeBeginDate).toISOString().slice(0, 10);
     option2StripeEndDate = new Date(option2StripeEndDate).toISOString().slice(0, 10);
-    let { option2id, nationalIn, stripeBeginDate, stripeEndDate } = data;
 
     let option2ItemObj = {
       strike: 1.3000,
       id: id,
       callPutOption: _.without(state.callPutOptionList, option1.callPutOption)[0],
-      stripeBeginDate: stripeBeginDate || option2StripeBeginDate,
-      stripeEndDate: stripeEndDate || option2StripeEndDate,
+      stripeBeginDate: option2StripeBeginDate,
+      stripeEndDate: option2StripeEndDate,
       nationalIn: nationalIn || 0,
       nationalInAction: _.without(state.nationalInActionList, option1.nationalInAction)[0],
     };
@@ -143,10 +146,9 @@ const mutations = {
       state.option2.push(option2ItemObj)
     }
     else {
-      var index = _.findIndex(state.option2, { option2id: option2id });
-      
+      option2ItemObj.option2id = option2id;
       state.option2.splice(index, 1, option2ItemObj);
-      
+      //Vue.set(state, 'option2', [...items]);
     }
   },
   [CHANGE_SYMBOL_END](state, { symbol }) {

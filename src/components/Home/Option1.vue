@@ -83,10 +83,12 @@
 </template>
 
 <script>
+import _ from "lodash";
 import Option2 from "./Option2.vue";
 import {
     ADD_OPTION1,
-    CHANGE_OPTIONS1
+    CHANGE_OPTIONS1,
+    CHANGE_OPTIONS2
 } from "@/store/actions.type";
 import {
     mapGetters
@@ -95,7 +97,7 @@ import {
 export default {
     name: "Option1",
     props: {
-        "option": {
+        option: {
             type: Object
         }
     },
@@ -107,23 +109,36 @@ export default {
             stripeBeginDate: this.option.stripeBeginDate,
             stripeEndDate: this.option.stripeEndDate,
             expiries: this.option.expiries
-        }
+        };
     },
     watch: {
+        option(newValue, oldValue) {
+            if (newValue != oldValue) {
+                let option2 = _.filter(this.option2, {
+                    id: this.option.id
+                });
+                option2.map((option2item) => {
+                    this.$store.dispatch(CHANGE_OPTIONS2, {
+                        id: this.option.id,
+                        data: option2item
+                    })
+                })
+            }
+        },
         optionClass() {
-            this.onChange()
+            this.onChange();
         },
         callPutOption() {
-            this.onChange()
+            this.onChange();
         },
         stripeBeginDate() {
-            this.onChange()
+            this.onChange();
         },
         stripeEndDate() {
-            this.onChange()
+            this.onChange();
         },
         expiries() {
-            this.onChange()
+            this.onChange();
         }
     },
     components: {
@@ -131,10 +146,10 @@ export default {
     },
     methods: {
         onClick() {
-            this.$store.dispatch(ADD_OPTION1)
+            this.$store.dispatch(ADD_OPTION1);
         },
         toggleDetail: function () {
-            this.isDetailShown = !this.isDetailShown
+            this.isDetailShown = !this.isDetailShown;
         },
         onChange() {
             this.$store.dispatch(CHANGE_OPTIONS1, {
@@ -144,11 +159,21 @@ export default {
                 stripeBeginDate: this.stripeBeginDate,
                 stripeEndDate: this.stripeEndDate,
                 expiries: this.expiries
-            })
+            });
         }
     },
     computed: {
-        ...mapGetters(["optionClassList", "callPutOptionList", "nationalInActionList", "symbolList", "selectedSymbol"])
+        _() {
+            return _;
+        },
+        ...mapGetters([
+            "optionClassList",
+            "callPutOptionList",
+            "nationalInActionList",
+            "symbolList",
+            "selectedSymbol",
+            "option2"
+        ])
     }
 };
 </script>
