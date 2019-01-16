@@ -30,7 +30,7 @@ a {
 
 .strip-legs-option.card {
     min-height: 300px;
-    width: 300px;
+    min-width: 300px;
     margin-right: 5px;
     border: 1px solid #3875f1;
 }
@@ -61,4 +61,12 @@ a {
 .strip-legs-option .list-group-item {
     padding: 0.25rem;
     border-radius: 0!important;
+}
+
+.strip-legs-option.option1 {
+    border: 1px solid #3875f1;
+}
+
+.strip-legs-option.option2 {
+    border: 1px solid #507ebf;
 }

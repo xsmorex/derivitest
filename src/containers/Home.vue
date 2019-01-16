@@ -4,7 +4,6 @@
     <div class="middle-section mt-3 pt-4 pb-5">
         <div class="d-flex flex-row flex-now">
             <Option1 />
-            <Option2 />
         </div>
     </div>
 </b-container>
@@ -13,14 +12,11 @@
 <script>
 import TopPanel from "../components/Home/TopPanel.vue";
 import Option1 from "../components/Home/Option1.vue";
-import Option2 from "../components/Home/Option2.vue";
-
 export default {
     name: "Home",
     components: {
         TopPanel,
-        Option1,
-        Option2
+        Option1
     }
 };
 </script>
