@@ -11,7 +11,7 @@
     <b-card-body class="p-0">
         <div class="d-flex flex-row flex-now" v-if="optionlist.length>0">
             <template v-for="opt2 in optionlist">
-                <Option2Item :key="opt2.optid" :opt2="opt2" />
+                <Option2Item :key="opt2.optid" :option="option" :opt2="opt2" />
             </template>
         </div>
     </b-card-body>

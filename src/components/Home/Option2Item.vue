@@ -46,7 +46,7 @@
         <b-list-group-item>
             <b-form-group class="m-0" label="" label-for="nationalIn">
                 <b-input-group>
-                    <b-form-input size="sm" name="nationalIn" type="text" value="100,000"></b-form-input>
+                    <b-form-input size="sm" name="nationalIn" type="text" v-model="nationalIn"></b-form-input>
                     <b-input-group-append>
                         <b-button size="sm" variant="warning">Sell</b-button>
                     </b-input-group-append>
@@ -62,16 +62,45 @@
 import {
     mapGetters
 } from "vuex";
+import {
+    CHANGE_OPTIONS2
+} from "@/store/actions.type";
 export default {
     name: "Option2Item",
     props: {
         opt2: {
             Type: Object
+        },
+        option: {
+            Type: Object
+        }
+    },
+    data: function () {
+        return {
+            isDetailShown: true,
+            nationalIn: this.opt2.nationalIn
+        };
+    },
+    watch: {
+        nationalIn() {
+            this.onChange();
+        },
+    },
+    methods: {
+        onChange() {
+            console.log(this.option)
+            this.$store.dispatch(CHANGE_OPTIONS2, {
+                id: this.option.id,
+                data: {
+                    option2id: this.opt2.option2id,
+                    nationalIn: this.nationalIn
+                }
+            });
         }
     },
     computed: {
-        ...mapGetters(["selectedSymbol","callPutOptionList"]),
-         getCallPutOptionList() {
+        ...mapGetters(["selectedSymbol", "callPutOptionList"]),
+        getCallPutOptionList() {
             let items = [];
             this.callPutOptionList.map((data) => {
                 items.push([this.selectedSymbol, data].join(" "))

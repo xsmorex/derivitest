@@ -59,7 +59,7 @@
                     Leg Total National:
                 </b-list-group-item>
                 <b-list-group-item>
-                    600,000
+                    {{getTotalNational}}
                 </b-list-group-item>
                 <b-list-group-item>
                     <b-form-group class="m-0" label="" label-for="nationalIn">
@@ -165,6 +165,12 @@ export default {
     computed: {
         _() {
             return _;
+        },
+        getTotalNational() {
+            let option2 = _.filter(this.option2, {
+                id: this.option.id
+            });
+            return _.sumBy(option2,x => parseFloat(x.nationalIn) )
         },
         ...mapGetters([
             "optionClassList",
