@@ -57,3 +57,8 @@ a {
 .strip-legs-option .list-group-item:nth-child(even) {
     background: #e1eefc
 }
+
+.strip-legs-option .list-group-item {
+    padding: 0.25rem;
+    border-radius: 0!important;
+}
