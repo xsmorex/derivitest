@@ -4,7 +4,7 @@
         <div slot="header">
             Strip > Legs
             <div class="card-header-actions">
-                <b-link href="#" class="card-header-action btn-setting">
+                <b-link href="#" class="card-header-action btn-setting" v-on:click.capture='onClick'>
                     <i class="fa fa-plus"></i>
                 </b-link>
             </div>
@@ -12,7 +12,7 @@
         <b-card-body class="p-0">
             <b-list-group flush>
                 <b-list-group-item>
-                    <b-form-select name="optionClass" :plain="true" :options="optionClassList" :value="option.optionClass">
+                    <b-form-select name="optionClass" :plain="true" :options="optionClassList" :value="option.optionClass" >
                     </b-form-select>
                 </b-list-group-item>
                 <b-list-group-item>
@@ -46,7 +46,7 @@
                     </b-form-group>
                 </b-list-group-item>
                 <b-list-group-item>
-                    <b-button block variant="secondary" class="btn-pill" size="sm">Strip Details</b-button>
+                    <b-button block variant="secondary" class="btn-pill" size="sm"  @click='toggleDetail()'>Toggle Strip Details</b-button>
                 </b-list-group-item>
                 <b-list-group-item>
                     Leg Total National:
@@ -69,12 +69,17 @@
             </b-list-group>
         </b-card-body>
     </b-card>
-    <Option2 />
+    <template v-if="isDetailShown">
+        <Option2 :option = "option"/>
+    </template>
 </div>
 </template>
 
 <script>
 import Option2 from "./Option2.vue";
+import {
+    ADD_OPTION1
+} from "@/store/actions.type";
 import {
     mapGetters
 } from "vuex";
@@ -86,8 +91,21 @@ export default {
             type: Object
         }
     },
+    data: function () {
+        return {
+            isDetailShown: true
+        }
+    },
     components: {
         Option2
+    },
+    methods: {
+        onClick() {
+            this.$store.dispatch(ADD_OPTION1)
+        },
+        toggleDetail: function(){
+            this.isDetailShown = !this.isDetailShown
+        }
     },
     computed: {
         ...mapGetters(["optionClassList", "callPutOptionList", "nationalInActionList", "symbolList", "selectedSymbol"]),

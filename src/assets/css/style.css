@@ -70,3 +70,11 @@ a {
 .strip-legs-option.option2 {
     border: 1px solid #507ebf;
 }
+.strip-legs-option.option1 .card-header{
+    background: #3875f1;
+    color: #fff;
+}
+.strip-legs-option.option2 .card-header{
+  background: #507ebf;
+  color: #fff;
+}

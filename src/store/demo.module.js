@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { CHANGE_OPTIONS1, CHANGE_SELECTED_SYMBOL, SET_DEFAULT_OPTION1 } from "./actions.type";
+import { CHANGE_OPTIONS1, CHANGE_SELECTED_SYMBOL, SET_DEFAULT_OPTION1,ADD_OPTION1 } from "./actions.type";
 import {
   CHANGE_OPTIONS1_END,
   CHANGE_SYMBOL_END
@@ -7,7 +7,7 @@ import {
 const state = {
   option1: [],
   option2: [],
-  optionClassList: ["Vanilla", "CashDeals","Binaries"],
+  optionClassList: ["Vanilla", "CashDeals", "Binaries"],
   callPutOptionList: ["Put", "Buy"],
   nationalInActionList: ["Buy", "Sell"],
   selectedSymbol: "GBP",
@@ -36,11 +36,17 @@ const getters = {
   symbolList(state) {
     return state.symbolList;
   },
+  option2() {
+    return state.option2;
+  }
 };
 
 const actions = {
   [SET_DEFAULT_OPTION1]({ commit }) {
-    commit(CHANGE_OPTIONS1_END,{})
+    commit(CHANGE_OPTIONS1_END, {})
+  },
+  [ADD_OPTION1]({ commit }) {
+    commit(CHANGE_OPTIONS1_END, {})
   },
   [CHANGE_OPTIONS1]({ commit }, data) {
     commit(CHANGE_OPTIONS1_END, data);
@@ -56,20 +62,20 @@ const actions = {
 const mutations = {
   [CHANGE_OPTIONS1_END](state, data) {
     let defualtStripeBeginDate = new Date();
-    defualtStripeBeginDate = new Date(defualtStripeBeginDate).toISOString().slice(0,10);
+    defualtStripeBeginDate = new Date(defualtStripeBeginDate).toISOString().slice(0, 10);
     let defaultStripeEndDate = new Date();
     defaultStripeEndDate.setMonth(defaultStripeEndDate.getMonth() + 1);
-    defaultStripeEndDate = new Date(defaultStripeEndDate).toISOString().slice(0,10);
+    defaultStripeEndDate = new Date(defaultStripeEndDate).toISOString().slice(0, 10);
     let { id, optionClass, callPutOption, stripeBeginDate, stripeEndDate, expiries, nationalInAction } = data;
-  
+
     let option1 = {
       strike: 1.3000,
-      optionClass:optionClass || state.optionClassList[2],
-      callPutOption:callPutOption || state.callPutOptionList[0],
-      stripeBeginDate:stripeBeginDate || defualtStripeBeginDate,
-      stripeEndDate:stripeEndDate || defaultStripeEndDate,
-      expiries:expiries || 1,
-      nationalInAction:nationalInAction || state.nationalInActionList[0]
+      optionClass: optionClass || state.optionClassList[2],
+      callPutOption: callPutOption || state.callPutOptionList[0],
+      stripeBeginDate: stripeBeginDate || defualtStripeBeginDate,
+      stripeEndDate: stripeEndDate || defaultStripeEndDate,
+      expiries: expiries || 1,
+      nationalInAction: nationalInAction || state.nationalInActionList[0]
     };
     if (_.isUndefined(id) || id == 0) {
       option1.id = "Option_" + Date.now() + Math.random();
